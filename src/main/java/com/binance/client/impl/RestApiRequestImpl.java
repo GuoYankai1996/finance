@@ -64,13 +64,16 @@ class RestApiRequestImpl {
         if (builder != null) {
             if (builder.hasPostParam()) {
                 return new Request.Builder().url(requestUrl).post(builder.buildPostBody())
-                        .addHeader("Content-Type", "application/json").build();
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("client_SDK_Version", "binance_futures-1.0.1-java").build();
             } else {
                 return new Request.Builder().url(requestUrl + builder.buildUrl())
-                        .addHeader("Content-Type", "application/x-www-form-urlencoded").build();
+                        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                        .addHeader("client_SDK_Version", "binance_futures-1.0.1-java").build();
             }
         } else {
             return new Request.Builder().url(requestUrl).addHeader("Content-Type", "application/x-www-form-urlencoded")
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
         }
     }
@@ -87,6 +90,7 @@ class RestApiRequestImpl {
             return new Request.Builder().url(requestUrl).post(builder.buildPostBody())
                     .addHeader("Content-Type", "application/json")
                     .addHeader("X-MBX-APIKEY", apiKey)
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
         } else if(builder.checkMethod("PUT")) {
             requestUrl += builder.buildUrl();
@@ -94,18 +98,21 @@ class RestApiRequestImpl {
                     .put(builder.buildPostBody())
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .addHeader("X-MBX-APIKEY", apiKey)
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
         } else if(builder.checkMethod("DELETE")) {
             requestUrl += builder.buildUrl();
             return new Request.Builder().url(requestUrl)
                     .delete()
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .addHeader("X-MBX-APIKEY", apiKey)
                     .build();
         } else {
             requestUrl += builder.buildUrl();
             return new Request.Builder().url(requestUrl)
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .addHeader("X-MBX-APIKEY", apiKey)
                     .build();
         }
@@ -139,23 +146,27 @@ class RestApiRequestImpl {
                     .post(builder.buildPostBody())
                     .addHeader("Content-Type", "application/json")
                     .addHeader("X-MBX-APIKEY", apiKey)
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
         } else if(builder.checkMethod("DELETE")) {
             return new Request.Builder().url(requestUrl)
                     .delete()
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .addHeader("X-MBX-APIKEY", apiKey)
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
         } else if(builder.checkMethod("PUT")) {
             return new Request.Builder().url(requestUrl)
                     .put(builder.buildPostBody())
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .addHeader("X-MBX-APIKEY", apiKey)
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
         } else {
             return new Request.Builder().url(requestUrl)
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .addHeader("X-MBX-APIKEY", apiKey)
+                    .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
         }
     }
