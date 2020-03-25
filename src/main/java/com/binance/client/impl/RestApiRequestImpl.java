@@ -9,6 +9,7 @@ import com.binance.client.RequestOptions;
 import com.binance.client.exception.BinanceApiException;
 import com.binance.client.impl.utils.JsonWrapperArray;
 import com.binance.client.impl.utils.UrlParamsBuilder;
+import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.AggregateTrade;
 import com.binance.client.model.market.Candlestick;
 import com.binance.client.model.market.ExchangeFilter;
@@ -578,13 +579,14 @@ class RestApiRequestImpl {
         return request;
     }
 
-    RestApiRequest<Order> postOrder(String symbol, OrderSide side, OrderType orderType,
+    RestApiRequest<Order> postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
             TimeInForce timeInForce, String quantity, String price, String reduceOnly,
             String newClientOrderId, String stopPrice, WorkingType workingType) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
                 .putToUrl("side", side)
+                .putToUrl("positionSide", positionSide)
                 .putToUrl("type", orderType)
                 .putToUrl("timeInForce", timeInForce)
                 .putToUrl("quantity", quantity)
@@ -605,6 +607,7 @@ class RestApiRequestImpl {
             result.setPrice(jsonWrapper.getBigDecimal("price"));
             result.setReduceOnly(jsonWrapper.getBoolean("reduceOnly"));
             result.setSide(jsonWrapper.getString("side"));
+            result.setPositionSide(jsonWrapper.getString("positionSide"));
             result.setStatus(jsonWrapper.getString("status"));
             result.setStopPrice(jsonWrapper.getBigDecimal("stopPrice"));
             result.setSymbol(jsonWrapper.getString("symbol"));
@@ -612,6 +615,21 @@ class RestApiRequestImpl {
             result.setType(jsonWrapper.getString("type"));
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<ResponseResult> changePositionSide(boolean dual) {
+        RestApiRequest<ResponseResult> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("dualSidePosition", String.valueOf(dual));
+        request.request = createRequestByPostWithSignature("/fapi/v1/positionSide/dual", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            ResponseResult result = new ResponseResult();
+            result.setCode(jsonWrapper.getInteger("code"));
+            result.setMsg(jsonWrapper.getString("msg"));
             return result;
         });
         return request;

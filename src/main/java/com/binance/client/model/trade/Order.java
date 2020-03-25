@@ -23,6 +23,8 @@ public class Order {
 
     private String side;
 
+    private String positionSide;
+
     private String status;
 
     private BigDecimal stopPrice;
@@ -101,6 +103,14 @@ public class Order {
         this.side = side;
     }
 
+    public String getPositionSide() {
+        return positionSide;
+    }
+
+    public void setPositionSide(String positionSide) {
+        this.positionSide = positionSide;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -162,7 +172,7 @@ public class Order {
         return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
                 .append("clientOrderId", clientOrderId).append("cumQuote", cumQuote).append("executedQty", executedQty)
                 .append("orderId", orderId).append("origQty", origQty).append("price", price)
-                .append("reduceOnly", reduceOnly).append("side", side).append("status", status)
+                .append("reduceOnly", reduceOnly).append("side", side).append("positionSide", positionSide).append("status", status)
                 .append("stopPrice", stopPrice).append("symbol", symbol).append("timeInForce", timeInForce)
                 .append("type", type).append("updateTime", updateTime).append("workingType", workingType).toString();
     }

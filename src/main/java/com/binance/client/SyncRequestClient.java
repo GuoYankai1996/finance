@@ -1,6 +1,7 @@
 package com.binance.client;
 
 import com.binance.client.impl.BinanceApiInternalFactory;
+import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.AggregateTrade;
 import com.binance.client.model.market.Candlestick;
 import com.binance.client.model.market.ExchangeInformation;
@@ -158,7 +159,7 @@ public interface SyncRequestClient {
      *
      * @return Order.
      */
-    Order postOrder(String symbol, OrderSide side, OrderType orderType,
+    Order postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
             TimeInForce timeInForce, String quantity, String price, String reduceOnly,
             String newClientOrderId, String stopPrice, WorkingType workingType);
 
@@ -168,6 +169,13 @@ public interface SyncRequestClient {
      * @return Order.
      */
     Order cancelOrder(String symbol, Long orderId, String origClientOrderId);
+
+    /**
+     * Switch position side. (true == dual, false == both)
+     *
+     * @return ResponseResult.
+     */
+    ResponseResult changePositionSide(boolean dual);
 
     /**
      * Check an order's status.
