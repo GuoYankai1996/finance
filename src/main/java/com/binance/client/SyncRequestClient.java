@@ -1,17 +1,7 @@
 package com.binance.client;
 
 import com.binance.client.impl.BinanceApiInternalFactory;
-import com.binance.client.model.market.AggregateTrade;
-import com.binance.client.model.market.Candlestick;
-import com.binance.client.model.market.ExchangeInformation;
-import com.binance.client.model.market.FundingRate;
-import com.binance.client.model.market.LiquidationOrder;
-import com.binance.client.model.market.MarkPrice;
-import com.binance.client.model.market.OrderBook;
-import com.binance.client.model.market.PriceChangeTicker;
-import com.binance.client.model.market.SymbolOrderBook;
-import com.binance.client.model.market.SymbolPrice;
-import com.binance.client.model.market.Trade;
+import com.binance.client.model.market.*;
 import com.binance.client.model.enums.*;
 import com.binance.client.model.trade.AccountBalance;
 import com.binance.client.model.trade.AccountInformation;
@@ -252,5 +242,34 @@ public interface SyncRequestClient {
      * @return null.
      */
     String closeUserDataStream(String listenKey);
+
+    /**
+     * Open Interest Stat (MARKET DATA)
+     *
+     * @return Open Interest Stat.
+     */
+    List<OpenInterestStat> getOpenInterestStat(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit);
+
+    /**
+     * Top Trader Long/Short Ratio (Accounts) (MARKET DATA)
+     *
+     * @return Top Trader Long/Short Ratio (Accounts).
+     */
+    List<CommonLongShortRatio> getTopTraderAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit);
+
+    /**
+     * Top Trader Long/Short Ratio (Positions) (MARKET DATA)
+     *
+     * @return Top Trader Long/Short Ratio (Positions).
+     */
+    List<CommonLongShortRatio> getTopTraderPositionRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit);
+
+    /**
+     * Long/Short Ratio (MARKET DATA)
+     *
+     * @return global Long/Short Ratio. 
+     */
+    List<CommonLongShortRatio> getGlobalAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit);
+
 
 }
