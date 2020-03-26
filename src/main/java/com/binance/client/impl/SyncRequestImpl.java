@@ -1,6 +1,7 @@
 package com.binance.client.impl;
 
 import com.binance.client.SyncRequestClient;
+import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
 import com.binance.client.model.enums.*;
 import com.binance.client.model.trade.AccountBalance;
@@ -83,12 +84,17 @@ public class SyncRequestImpl implements SyncRequestClient {
     public List<LiquidationOrder> getLiquidationOrders(String symbol, Long startTime, Long endTime, Integer limit) {
         return RestApiInvoker.callSync(requestImpl.getLiquidationOrders(symbol, startTime, endTime, limit));
     }
+
+    @Override
+    public List<Object> postBatchOrders(String batchOrders) {
+        return RestApiInvoker.callSync(requestImpl.postBatchOrders(batchOrders));
+    }
     
     @Override
-    public Order postOrder(String symbol, OrderSide side, OrderType orderType,
+    public Order postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
             TimeInForce timeInForce, String quantity, String price, String reduceOnly,
             String newClientOrderId, String stopPrice, WorkingType workingType) {
-        return RestApiInvoker.callSync(requestImpl.postOrder(symbol, side, orderType, 
+        return RestApiInvoker.callSync(requestImpl.postOrder(symbol, side, positionSide, orderType,
                 timeInForce, quantity, price, reduceOnly, 
                 newClientOrderId, stopPrice, workingType));
     }
@@ -97,7 +103,12 @@ public class SyncRequestImpl implements SyncRequestClient {
     public Order cancelOrder(String symbol, Long orderId, String origClientOrderId) {
         return RestApiInvoker.callSync(requestImpl.cancelOrder(symbol, orderId, origClientOrderId));
     }
-    
+
+    @Override
+    public ResponseResult changePositionSide(boolean dual) {
+        return RestApiInvoker.callSync(requestImpl.changePositionSide(dual));
+    }
+
     @Override
     public Order getOrder(String symbol, Long orderId, String origClientOrderId) {
         return RestApiInvoker.callSync(requestImpl.getOrder(symbol, orderId, origClientOrderId));

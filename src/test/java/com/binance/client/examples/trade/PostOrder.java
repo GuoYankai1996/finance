@@ -11,7 +11,12 @@ public class PostOrder {
         RequestOptions options = new RequestOptions();
         SyncRequestClient syncRequestClient = SyncRequestClient.create(PrivateConfig.API_KEY, PrivateConfig.SECRET_KEY,
                 options);
-        System.out.println(syncRequestClient.postOrder("BTCUSDT", OrderSide.SELL, OrderType.LIMIT, TimeInForce.GTC,
-                "99", "0.00001", null, null, null, null));
+//        System.out.println(syncRequestClient.postOrder("BTCUSDT", OrderSide.SELL, PositionSide.BOTH, OrderType.LIMIT, TimeInForce.GTC,
+//                "1", "1", null, null, null, null));
+
+        // place dual position side order.
+        // Switch between dual or both position side, call: com.binance.client.examples.trade.ChangePositionSide
+        System.out.println(syncRequestClient.postOrder("BTCUSDT", OrderSide.SELL, PositionSide.SHORT, OrderType.LIMIT, TimeInForce.GTC,
+                "1", "9000", null, null, null, null));
     }
 }

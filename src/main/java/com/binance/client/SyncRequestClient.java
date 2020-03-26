@@ -1,6 +1,7 @@
 package com.binance.client;
 
 import com.binance.client.impl.BinanceApiInternalFactory;
+import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
 import com.binance.client.model.enums.*;
 import com.binance.client.model.trade.AccountBalance;
@@ -142,13 +143,20 @@ public interface SyncRequestClient {
      * @return All liquidation orders.
      */
     List<LiquidationOrder> getLiquidationOrders(String symbol, Long startTime, Long endTime, Integer limit);
+
+    /**
+     * Place new orders
+     * @param batchOrders
+     * @return
+     */
+    List<Object> postBatchOrders(String batchOrders);
     
     /**
      * Send in a new order.
      *
      * @return Order.
      */
-    Order postOrder(String symbol, OrderSide side, OrderType orderType,
+    Order postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
             TimeInForce timeInForce, String quantity, String price, String reduceOnly,
             String newClientOrderId, String stopPrice, WorkingType workingType);
 
@@ -158,6 +166,13 @@ public interface SyncRequestClient {
      * @return Order.
      */
     Order cancelOrder(String symbol, Long orderId, String origClientOrderId);
+
+    /**
+     * Switch position side. (true == dual, false == both)
+     *
+     * @return ResponseResult.
+     */
+    ResponseResult changePositionSide(boolean dual);
 
     /**
      * Check an order's status.

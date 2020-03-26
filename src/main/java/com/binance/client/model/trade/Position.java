@@ -23,6 +23,12 @@ public class Position {
 
     private BigDecimal unrealizedProfit;
 
+    private String entryPrice;
+
+    private String maxNotional;
+
+    private String positionSide;
+
     public Boolean getIsolated() {
         return isolated;
     }
@@ -87,12 +93,38 @@ public class Position {
         this.unrealizedProfit = unrealizedProfit;
     }
 
+    public String getEntryPrice() {
+        return entryPrice;
+    }
+
+    public void setEntryPrice(String entryPrice) {
+        this.entryPrice = entryPrice;
+    }
+
+    public String getMaxNotional() {
+        return maxNotional;
+    }
+
+    public void setMaxNotional(String maxNotional) {
+        this.maxNotional = maxNotional;
+    }
+
+    public String getPositionSide() {
+        return positionSide;
+    }
+
+    public void setPositionSide(String positionSide) {
+        this.positionSide = positionSide;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
                 .append("initialMargin", initialMargin).append("maintMargin", maintMargin)
                 .append("openOrderInitialMargin", openOrderInitialMargin)
                 .append("positionInitialMargin", positionInitialMargin).append("symbol", symbol)
-                .append("unrealizedProfit", unrealizedProfit).toString();
+                .append("unrealizedProfit", unrealizedProfit).append("entryPrice", entryPrice)
+                .append("maxNotional", maxNotional).append("positionSide", positionSide)
+                .append("isolated", isolated).toString();
     }
 }
