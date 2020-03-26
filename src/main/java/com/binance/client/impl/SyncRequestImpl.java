@@ -2,17 +2,7 @@ package com.binance.client.impl;
 
 import com.binance.client.SyncRequestClient;
 import com.binance.client.model.ResponseResult;
-import com.binance.client.model.market.AggregateTrade;
-import com.binance.client.model.market.Candlestick;
-import com.binance.client.model.market.ExchangeInformation;
-import com.binance.client.model.market.FundingRate;
-import com.binance.client.model.market.LiquidationOrder;
-import com.binance.client.model.market.MarkPrice;
-import com.binance.client.model.market.OrderBook;
-import com.binance.client.model.market.PriceChangeTicker;
-import com.binance.client.model.market.SymbolOrderBook;
-import com.binance.client.model.market.SymbolPrice;
-import com.binance.client.model.market.Trade;
+import com.binance.client.model.market.*;
 import com.binance.client.model.enums.*;
 import com.binance.client.model.trade.AccountBalance;
 import com.binance.client.model.trade.AccountInformation;
@@ -174,4 +164,23 @@ public class SyncRequestImpl implements SyncRequestClient {
         return RestApiInvoker.callSync(requestImpl.closeUserDataStream(listenKey));
     }
 
+    @Override
+    public List<OpenInterestStat> getOpenInterestStat(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        return RestApiInvoker.callSync(requestImpl.getOpenInterestStat(symbol, period, startTime, endTime, limit));
+    }
+
+    @Override
+    public List<CommonLongShortRatio> getTopTraderAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        return RestApiInvoker.callSync(requestImpl.getTopTraderAccountRatio(symbol, period, startTime, endTime, limit));
+    }
+
+    @Override
+    public List<CommonLongShortRatio> getTopTraderPositionRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        return RestApiInvoker.callSync(requestImpl.getTopTraderPositionRatio(symbol, period, startTime, endTime, limit));
+    }
+
+    @Override
+    public List<CommonLongShortRatio> getGlobalAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        return RestApiInvoker.callSync(requestImpl.getGlobalAccountRatio(symbol, period, startTime, endTime, limit));
+    }
 }

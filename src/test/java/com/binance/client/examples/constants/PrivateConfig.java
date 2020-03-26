@@ -1,9 +1,5 @@
 package com.binance.client.examples.constants;
 
-/**
- * @author : wangwanlu
- * @since : 2020/3/24, Tue
- **/
 public class PrivateConfig {
 
     // 187

@@ -10,21 +10,7 @@ import com.binance.client.exception.BinanceApiException;
 import com.binance.client.impl.utils.JsonWrapperArray;
 import com.binance.client.impl.utils.UrlParamsBuilder;
 import com.binance.client.model.ResponseResult;
-import com.binance.client.model.market.AggregateTrade;
-import com.binance.client.model.market.Candlestick;
-import com.binance.client.model.market.ExchangeFilter;
-import com.binance.client.model.market.ExchangeInfoEntry;
-import com.binance.client.model.market.ExchangeInformation;
-import com.binance.client.model.market.FundingRate;
-import com.binance.client.model.market.LiquidationOrder;
-import com.binance.client.model.market.MarkPrice;
-import com.binance.client.model.market.OrderBook;
-import com.binance.client.model.market.OrderBookEntry;
-import com.binance.client.model.market.PriceChangeTicker;
-import com.binance.client.model.market.RateLimit;
-import com.binance.client.model.market.SymbolOrderBook;
-import com.binance.client.model.market.SymbolPrice;
-import com.binance.client.model.market.Trade;
+import com.binance.client.model.market.*;
 import com.binance.client.model.trade.AccountBalance;
 import com.binance.client.model.trade.AccountInformation;
 import com.binance.client.model.trade.Asset;
@@ -993,6 +979,129 @@ class RestApiRequestImpl {
 
         request.jsonParser = (jsonWrapper -> {
             String result = "Ok";
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<OpenInterestStat>> getOpenInterestStat(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        RestApiRequest<List<OpenInterestStat>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbol)
+                .putToUrl("period", period.getCode())
+                .putToUrl("startTime", startTime)
+                .putToUrl("endTime", endTime)
+                .putToUrl("limit", limit);
+        
+        
+//        request.request = createRequestByGetWithSignature("/gateway-api//v1/public/future/data/openInterestHist", builder);
+        request.request = createRequestByGetWithSignature("/futures/data/openInterestHist", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<OpenInterestStat> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                OpenInterestStat element = new OpenInterestStat();
+                element.setSymbol(item.getString("symbol"));
+                element.setSumOpenInterest(item.getBigDecimal("sumOpenInterest"));
+                element.setSumOpenInterestValue(item.getBigDecimal("sumOpenInterestValue"));
+                element.setTimestamp(item.getLong("timestamp"));
+
+                result.add(element);
+            });
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<CommonLongShortRatio>> getTopTraderAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        RestApiRequest<List<CommonLongShortRatio>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbol)
+                .putToUrl("period", period.getCode())
+                .putToUrl("startTime", startTime)
+                .putToUrl("endTime", endTime)
+                .putToUrl("limit", limit);
+
+
+//        request.request = createRequestByGetWithSignature("/gateway-api//v1/public/future/data/topLongShortAccountRatio", builder);
+        request.request = createRequestByGetWithSignature("/futures/data/topLongShortAccountRatio", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<CommonLongShortRatio> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                CommonLongShortRatio element = new CommonLongShortRatio();
+                element.setSymbol(item.getString("symbol"));
+                element.setLongAccount(item.getBigDecimal("longAccount"));
+                element.setLongShortRatio(item.getBigDecimal("longShortRatio"));
+                element.setShortAccount(item.getBigDecimal("shortAccount"));
+                element.setTimestamp(item.getLong("timestamp"));
+
+                result.add(element);
+            });
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<CommonLongShortRatio>> getTopTraderPositionRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        RestApiRequest<List<CommonLongShortRatio>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbol)
+                .putToUrl("period", period.getCode())
+                .putToUrl("startTime", startTime)
+                .putToUrl("endTime", endTime)
+                .putToUrl("limit", limit);
+
+
+//        request.request = createRequestByGetWithSignature("/gateway-api//v1/public/future/data/topLongShortPositionRatio", builder);
+        request.request = createRequestByGetWithSignature("/futures/data/topLongShortPositionRatio", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<CommonLongShortRatio> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                CommonLongShortRatio element = new CommonLongShortRatio();
+                element.setSymbol(item.getString("symbol"));
+                element.setLongAccount(item.getBigDecimal("longAccount"));
+                element.setLongShortRatio(item.getBigDecimal("longShortRatio"));
+                element.setShortAccount(item.getBigDecimal("shortAccount"));
+                element.setTimestamp(item.getLong("timestamp"));
+
+                result.add(element);
+            });
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<CommonLongShortRatio>> getGlobalAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        RestApiRequest<List<CommonLongShortRatio>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbol)
+                .putToUrl("period", period.getCode())
+                .putToUrl("startTime", startTime)
+                .putToUrl("endTime", endTime)
+                .putToUrl("limit", limit);
+
+
+//        request.request = createRequestByGetWithSignature("/gateway-api//v1/public/future/data/globalLongShortAccountRatio", builder);
+        request.request = createRequestByGetWithSignature("/futures/data/globalLongShortAccountRatio", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<CommonLongShortRatio> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                CommonLongShortRatio element = new CommonLongShortRatio();
+                element.setSymbol(item.getString("symbol"));
+                element.setLongAccount(item.getBigDecimal("longAccount"));
+                element.setLongShortRatio(item.getBigDecimal("longShortRatio"));
+                element.setShortAccount(item.getBigDecimal("shortAccount"));
+                element.setTimestamp(item.getLong("timestamp"));
+
+                result.add(element);
+            });
             return result;
         });
         return request;
