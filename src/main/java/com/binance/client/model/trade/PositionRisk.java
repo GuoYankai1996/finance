@@ -21,6 +21,12 @@ public class PositionRisk {
 
     private String symbol;
 
+    private String isolatedMargin;
+
+    private String positionSide;
+
+    private String marginType;
+
     private BigDecimal unrealizedProfit;
 
     public BigDecimal getEntryPrice() {
@@ -87,12 +93,37 @@ public class PositionRisk {
         this.unrealizedProfit = unrealizedProfit;
     }
 
+    public String getIsolatedMargin() {
+        return isolatedMargin;
+    }
+
+    public void setIsolatedMargin(String isolatedMargin) {
+        this.isolatedMargin = isolatedMargin;
+    }
+
+    public String getPositionSide() {
+        return positionSide;
+    }
+
+    public void setPositionSide(String positionSide) {
+        this.positionSide = positionSide;
+    }
+
+    public String getMarginType() {
+        return marginType;
+    }
+
+    public void setMarginType(String marginType) {
+        this.marginType = marginType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE).append("entryPrice", entryPrice)
                 .append("leverage", leverage).append("maxNotionalValue", maxNotionalValue)
                 .append("liquidationPrice", liquidationPrice).append("markPrice", markPrice)
                 .append("positionAmt", positionAmt).append("symbol", symbol)
-                .append("unrealizedProfit", unrealizedProfit).toString();
+                .append("unrealizedProfit", unrealizedProfit).append("isolatedMargin", isolatedMargin)
+                .append("positionSide", positionSide).append("marginType", marginType).toString();
     }
 }

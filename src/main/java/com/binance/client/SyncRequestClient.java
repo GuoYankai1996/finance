@@ -143,6 +143,13 @@ public interface SyncRequestClient {
      * @return All liquidation orders.
      */
     List<LiquidationOrder> getLiquidationOrders(String symbol, Long startTime, Long endTime, Integer limit);
+
+    /**
+     * Place new orders
+     * @param batchOrders
+     * @return
+     */
+    List<Object> postBatchOrders(String batchOrders);
     
     /**
      * Send in a new order.

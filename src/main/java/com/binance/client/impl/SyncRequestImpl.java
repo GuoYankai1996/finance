@@ -84,6 +84,11 @@ public class SyncRequestImpl implements SyncRequestClient {
     public List<LiquidationOrder> getLiquidationOrders(String symbol, Long startTime, Long endTime, Integer limit) {
         return RestApiInvoker.callSync(requestImpl.getLiquidationOrders(symbol, startTime, endTime, limit));
     }
+
+    @Override
+    public List<Object> postBatchOrders(String batchOrders) {
+        return RestApiInvoker.callSync(requestImpl.postBatchOrders(batchOrders));
+    }
     
     @Override
     public Order postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,

@@ -11,7 +11,6 @@ import com.binance.client.examples.constants.PrivateConfig;
 public class ChangePositionSide {
     public static void main(String[] args) {
         RequestOptions options = new RequestOptions();
-        options.setUrl("http://localhost:9081");
         SyncRequestClient syncRequestClient = SyncRequestClient.create(PrivateConfig.API_KEY, PrivateConfig.SECRET_KEY,
                 options);
         System.out.println(syncRequestClient.changePositionSide(true));
