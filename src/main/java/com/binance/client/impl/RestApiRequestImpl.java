@@ -1089,4 +1089,34 @@ class RestApiRequestImpl {
         return request;
     }
 
+    RestApiRequest<List<TakerLongShortStat>> getTakerLongShortRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        RestApiRequest<List<TakerLongShortStat>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbol)
+                .putToUrl("period", period.getCode())
+                .putToUrl("startTime", startTime)
+                .putToUrl("endTime", endTime)
+                .putToUrl("limit", limit);
+
+
+//        request.request = createRequestByGetWithSignature("/gateway-api//v1/public/future/data/globalLongShortAccountRatio", builder);
+        request.request = createRequestByGetWithSignature("/futures/data/takerlongshortRatio", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<TakerLongShortStat> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                TakerLongShortStat element = new TakerLongShortStat();
+                element.setBuySellRatio(item.getBigDecimal("buySellRatio"));
+                element.setSellVol(item.getBigDecimal("sellVol"));
+                element.setBuyVol(item.getBigDecimal("buyVol"));
+                element.setTimestamp(item.getLong("timestamp"));
+
+                result.add(element);
+            });
+            return result;
+        });
+        return request;
+    }
+
 }
