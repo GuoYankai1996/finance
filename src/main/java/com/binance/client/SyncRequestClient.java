@@ -1,5 +1,6 @@
 package com.binance.client;
 
+import com.alibaba.fastjson.JSONObject;
 import com.binance.client.impl.BinanceApiInternalFactory;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
@@ -168,11 +169,32 @@ public interface SyncRequestClient {
     Order cancelOrder(String symbol, Long orderId, String origClientOrderId);
 
     /**
+     * Cancel all open orders.
+     *
+     * @return ResponseResult.
+     */
+    ResponseResult cancelAllOpenOrder(String symbol);
+
+    /**
+     * Batch cancel orders.
+     *
+     * @return Order.
+     */
+    List<Object> batchCancelOrders(String symbol, String orderIdList, String origClientOrderIdList);
+
+    /**
      * Switch position side. (true == dual, false == both)
      *
      * @return ResponseResult.
      */
     ResponseResult changePositionSide(boolean dual);
+
+    /**
+     * Get if changed to HEDGE mode. (true == hedge mode, false == one-way mode)
+     *
+     * @return ResponseResult.
+     */
+    JSONObject getPositionSide();
 
     /**
      * Check an order's status.

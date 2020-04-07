@@ -1,5 +1,6 @@
 package com.binance.client.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.binance.client.SyncRequestClient;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
@@ -105,8 +106,23 @@ public class SyncRequestImpl implements SyncRequestClient {
     }
 
     @Override
+    public ResponseResult cancelAllOpenOrder(String symbol) {
+      return RestApiInvoker.callSync(requestImpl.cancelAllOpenOrder(symbol));
+    }
+
+    @Override
+    public List<Object> batchCancelOrders(String symbol, String orderIdList, String origClientOrderIdList) {
+        return RestApiInvoker.callSync(requestImpl.batchCancelOrders(symbol, orderIdList, origClientOrderIdList));
+    }
+
+    @Override
     public ResponseResult changePositionSide(boolean dual) {
         return RestApiInvoker.callSync(requestImpl.changePositionSide(dual));
+    }
+
+    @Override
+    public JSONObject getPositionSide() {
+        return RestApiInvoker.callSync(requestImpl.getPositionSide());
     }
 
     @Override

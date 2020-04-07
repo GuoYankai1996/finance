@@ -25,6 +25,7 @@ import com.binance.client.model.trade.PositionRisk;
 import com.binance.client.model.enums.*;
 
 import okhttp3.Request;
+import org.apache.commons.lang3.StringUtils;
 
 class RestApiRequestImpl {
 
@@ -668,6 +669,19 @@ class RestApiRequestImpl {
         return request;
     }
 
+    RestApiRequest<JSONObject> getPositionSide() {
+        RestApiRequest<JSONObject> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build();
+        request.request = createRequestByGetWithSignature("/fapi/v1/positionSide/dual", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            JSONObject result = new JSONObject();
+            result.put("dualSidePosition", jsonWrapper.getBoolean("dualSidePosition"));
+            return result;
+        });
+        return request;
+    }
+
     RestApiRequest<Order> cancelOrder(String symbol, Long orderId, String origClientOrderId) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
@@ -695,6 +709,71 @@ class RestApiRequestImpl {
             result.setUpdateTime(jsonWrapper.getLong("updateTime"));
             result.setWorkingType(jsonWrapper.getString("workingType"));
             return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<ResponseResult> cancelAllOpenOrder(String symbol) {
+        RestApiRequest<ResponseResult> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbol);
+        request.request = createRequestByDeleteWithSignature("/fapi/v1/allOpenOrders", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            ResponseResult responseResult = new ResponseResult();
+            responseResult.setCode(jsonWrapper.getInteger("code"));
+            responseResult.setMsg(jsonWrapper.getString("msg"));
+            return responseResult;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<Object>> batchCancelOrders(String symbol, String orderIdList, String origClientOrderIdList) {
+        RestApiRequest<List<Object>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build();
+        builder.putToUrl("symbol", symbol);
+        if (StringUtils.isNotBlank(orderIdList)) {
+            builder.putToUrl("orderIdList", orderIdList);
+        } else {
+            builder.putToUrl("origClientOrderIdList", origClientOrderIdList);
+        }
+        request.request = createRequestByDeleteWithSignature("/fapi/v1/batchOrders", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            JSONObject jsonObject = jsonWrapper.getJson();
+
+            // success results
+            List<Object> listResult = new ArrayList<>();
+            JSONArray jsonArray = (JSONArray) jsonObject.get("data");
+            jsonArray.forEach(obj -> {
+                if (((JSONObject)obj).containsKey("code")) {
+                    ResponseResult responseResult = new ResponseResult();
+                    responseResult.setCode(((JSONObject)obj).getInteger("code"));
+                    responseResult.setMsg(((JSONObject)obj).getString("msg"));
+                    listResult.add(responseResult);
+                } else {
+                    Order o = new Order();
+                    JSONObject jsonObj = (JSONObject) obj;
+                    o.setClientOrderId(jsonObj.getString("clientOrderId"));
+                    o.setCumQuote(jsonObj.getBigDecimal("cumQuote"));
+                    o.setExecutedQty(jsonObj.getBigDecimal("executedQty"));
+                    o.setOrderId(jsonObj.getLong("orderId"));
+                    o.setOrigQty(jsonObj.getBigDecimal("origQty"));
+                    o.setPrice(jsonObj.getBigDecimal("price"));
+                    o.setReduceOnly(jsonObj.getBoolean("reduceOnly"));
+                    o.setSide(jsonObj.getString("side"));
+                    o.setPositionSide(jsonObj.getString("positionSide"));
+                    o.setStatus(jsonObj.getString("status"));
+                    o.setStopPrice(jsonObj.getBigDecimal("stopPrice"));
+                    o.setSymbol(jsonObj.getString("symbol"));
+                    o.setTimeInForce(jsonObj.getString("timeInForce"));
+                    o.setType(jsonObj.getString("type"));
+                    o.setUpdateTime(jsonObj.getLong("updateTime"));
+                    o.setWorkingType(jsonObj.getString("workingType"));
+                    listResult.add(o);
+                }
+            });
+            return listResult;
         });
         return request;
     }
