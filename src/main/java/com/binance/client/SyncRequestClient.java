@@ -308,5 +308,11 @@ public interface SyncRequestClient {
      */
     List<CommonLongShortRatio> getGlobalAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit);
 
+    /**
+     * Taker Long/Short Ratio (MARKET DATA)
+     *
+     * @return Taker Long/Short Ratio. 
+     */
+    List<TakerLongShortStat> getTakerLongShortRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit);
 
 }
