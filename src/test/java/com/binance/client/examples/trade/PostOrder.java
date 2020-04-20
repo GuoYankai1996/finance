@@ -12,6 +12,6 @@ public class PostOrder {
         SyncRequestClient syncRequestClient = SyncRequestClient.create(PrivateConfig.API_KEY, PrivateConfig.SECRET_KEY,
                 options);
         System.out.println(syncRequestClient.postOrder("BTCUSDT", OrderSide.SELL, OrderType.LIMIT, TimeInForce.GTC,
-                "99", "0.00001", null, null, null, null));
+                "99", "0.00001", null, null, null, null, NewOrderRespType.RESULT));
     }
 }

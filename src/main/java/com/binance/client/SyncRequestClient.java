@@ -150,7 +150,7 @@ public interface SyncRequestClient {
      */
     Order postOrder(String symbol, OrderSide side, OrderType orderType,
             TimeInForce timeInForce, String quantity, String price, String reduceOnly,
-            String newClientOrderId, String stopPrice, WorkingType workingType);
+            String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType);
 
     /**
      * Cancel an active order.
