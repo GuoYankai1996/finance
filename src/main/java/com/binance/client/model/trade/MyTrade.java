@@ -29,6 +29,8 @@ public class MyTrade {
 
     private String side;
 
+    private String positionSide;
+
     private String symbol;
 
     private Long time;
@@ -121,6 +123,14 @@ public class MyTrade {
         this.side = side;
     }
 
+    public String getPositionSide() {
+        return positionSide;
+    }
+
+    public void setPositionSide(String positionSide) {
+        this.positionSide = positionSide;
+    }
+
     public String getSymbol() {
         return symbol;
     }
@@ -143,7 +153,7 @@ public class MyTrade {
                 .append("commission", commission).append("commissionAsset", commissionAsset)
                 .append("counterPartyId", counterPartyId).append("isMaker", isMaker)
                 .append("orderId", orderId).append("price", price).append("qty", qty).append("quoteQty", quoteQty)
-                .append("realizedPnl", realizedPnl).append("side", side).append("symbol", symbol).append("time", time)
-                .toString();
+                .append("realizedPnl", realizedPnl).append("side", side).append("positionSide", positionSide)
+                .append("symbol", symbol).append("time", time).toString();
     }
 }
