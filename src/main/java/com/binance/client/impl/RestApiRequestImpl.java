@@ -13,15 +13,7 @@ import com.binance.client.impl.utils.JsonWrapperArray;
 import com.binance.client.impl.utils.UrlParamsBuilder;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
-import com.binance.client.model.trade.AccountBalance;
-import com.binance.client.model.trade.AccountInformation;
-import com.binance.client.model.trade.Asset;
-import com.binance.client.model.trade.Income;
-import com.binance.client.model.trade.Leverage;
-import com.binance.client.model.trade.MyTrade;
-import com.binance.client.model.trade.Order;
-import com.binance.client.model.trade.Position;
-import com.binance.client.model.trade.PositionRisk;
+import com.binance.client.model.trade.*;
 import com.binance.client.model.enums.*;
 
 import okhttp3.Request;
@@ -82,7 +74,7 @@ class RestApiRequestImpl {
                     .addHeader("X-MBX-APIKEY", apiKey)
                     .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
-        } else if(builder.checkMethod("PUT")) {
+        } else if (builder.checkMethod("PUT")) {
             requestUrl += builder.buildUrl();
             return new Request.Builder().url(requestUrl)
                     .put(builder.buildPostBody())
@@ -90,7 +82,7 @@ class RestApiRequestImpl {
                     .addHeader("X-MBX-APIKEY", apiKey)
                     .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
-        } else if(builder.checkMethod("DELETE")) {
+        } else if (builder.checkMethod("DELETE")) {
             requestUrl += builder.buildUrl();
             return new Request.Builder().url(requestUrl)
                     .delete()
@@ -130,7 +122,7 @@ class RestApiRequestImpl {
                     "[Invoking] Builder is null when create request with Signature");
         }
         String requestUrl = url + address;
-            requestUrl += builder.buildUrl();
+        requestUrl += builder.buildUrl();
         if (builder.hasPostParam()) {
             return new Request.Builder().url(requestUrl)
                     .post(builder.buildPostBody())
@@ -138,14 +130,14 @@ class RestApiRequestImpl {
                     .addHeader("X-MBX-APIKEY", apiKey)
                     .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
-        } else if(builder.checkMethod("DELETE")) {
+        } else if (builder.checkMethod("DELETE")) {
             return new Request.Builder().url(requestUrl)
                     .delete()
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .addHeader("X-MBX-APIKEY", apiKey)
                     .addHeader("client_SDK_Version", "binance_futures-1.0.1-java")
                     .build();
-        } else if(builder.checkMethod("PUT")) {
+        } else if (builder.checkMethod("PUT")) {
             return new Request.Builder().url(requestUrl)
                     .put(builder.buildPostBody())
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
@@ -223,7 +215,7 @@ class RestApiRequestImpl {
                 symbolList.add(symbol);
             });
             result.setSymbols(symbolList);
-            
+
             return result;
         });
         return request;
@@ -259,7 +251,7 @@ class RestApiRequestImpl {
                 askList.add(element);
             });
             result.setAsks(askList);
-            
+
             return result;
         });
         return request;
@@ -285,7 +277,7 @@ class RestApiRequestImpl {
                 element.setIsBuyerMaker(item.getBoolean("isBuyerMaker"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
@@ -312,14 +304,14 @@ class RestApiRequestImpl {
                 element.setIsBuyerMaker(item.getBoolean("isBuyerMaker"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
     }
 
-    RestApiRequest<List<AggregateTrade>> getAggregateTrades(String symbol, Long fromId, 
-            Long startTime, Long endTime, Integer limit) {
+    RestApiRequest<List<AggregateTrade>> getAggregateTrades(String symbol, Long fromId,
+                                                            Long startTime, Long endTime, Integer limit) {
         RestApiRequest<List<AggregateTrade>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
@@ -343,14 +335,14 @@ class RestApiRequestImpl {
                 element.setIsBuyerMaker(item.getBoolean("m"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
     }
 
-    RestApiRequest<List<Candlestick>> getCandlestick(String symbol, CandlestickInterval interval, Long startTime, 
-            Long endTime, Integer limit) {
+    RestApiRequest<List<Candlestick>> getCandlestick(String symbol, CandlestickInterval interval, Long startTime,
+                                                     Long endTime, Integer limit) {
         RestApiRequest<List<Candlestick>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
@@ -379,7 +371,7 @@ class RestApiRequestImpl {
                 element.setIgnore(item.getBigDecimalAt(11));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
@@ -394,7 +386,7 @@ class RestApiRequestImpl {
         request.jsonParser = (jsonWrapper -> {
             List<MarkPrice> result = new LinkedList<>();
             JsonWrapperArray dataArray = new JsonWrapperArray(new JSONArray());
-            if(jsonWrapper.containKey("data")) {
+            if (jsonWrapper.containKey("data")) {
                 dataArray = jsonWrapper.getJsonArray("data");
             } else {
                 dataArray.add(jsonWrapper.convert2JsonObject());
@@ -408,7 +400,7 @@ class RestApiRequestImpl {
                 element.setTime(item.getLong("time"));
                 result.add(element);
             });
-            
+
             return result;
 
         });
@@ -434,7 +426,7 @@ class RestApiRequestImpl {
                 element.setFundingTime(item.getLong("fundingTime"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
@@ -449,7 +441,7 @@ class RestApiRequestImpl {
         request.jsonParser = (jsonWrapper -> {
             List<PriceChangeTicker> result = new LinkedList<>();
             JsonWrapperArray dataArray = new JsonWrapperArray(new JSONArray());
-            if(jsonWrapper.containKey("data")) {
+            if (jsonWrapper.containKey("data")) {
                 dataArray = jsonWrapper.getJsonArray("data");
             } else {
                 dataArray.add(jsonWrapper.convert2JsonObject());
@@ -474,7 +466,7 @@ class RestApiRequestImpl {
                 element.setCount(item.getLong("count"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
@@ -489,7 +481,7 @@ class RestApiRequestImpl {
         request.jsonParser = (jsonWrapper -> {
             List<SymbolPrice> result = new LinkedList<>();
             JsonWrapperArray dataArray = new JsonWrapperArray(new JSONArray());
-            if(jsonWrapper.containKey("data")) {
+            if (jsonWrapper.containKey("data")) {
                 dataArray = jsonWrapper.getJsonArray("data");
             } else {
                 dataArray.add(jsonWrapper.convert2JsonObject());
@@ -500,7 +492,7 @@ class RestApiRequestImpl {
                 element.setPrice(item.getBigDecimal("price"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
@@ -515,7 +507,7 @@ class RestApiRequestImpl {
         request.jsonParser = (jsonWrapper -> {
             List<SymbolOrderBook> result = new LinkedList<>();
             JsonWrapperArray dataArray = new JsonWrapperArray(new JSONArray());
-            if(jsonWrapper.containKey("data")) {
+            if (jsonWrapper.containKey("data")) {
                 dataArray = jsonWrapper.getJsonArray("data");
             } else {
                 dataArray.add(jsonWrapper.convert2JsonObject());
@@ -529,14 +521,14 @@ class RestApiRequestImpl {
                 element.setAskQty(item.getBigDecimal("askQty"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
     }
 
-    RestApiRequest<List<LiquidationOrder>> getLiquidationOrders(String symbol, Long startTime, Long endTime, 
-            Integer limit) {
+    RestApiRequest<List<LiquidationOrder>> getLiquidationOrders(String symbol, Long startTime, Long endTime,
+                                                                Integer limit) {
         RestApiRequest<List<LiquidationOrder>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
@@ -562,7 +554,7 @@ class RestApiRequestImpl {
                 element.setTime(item.getLong("time"));
                 result.add(element);
             });
-            
+
             return result;
         });
         return request;
@@ -581,10 +573,10 @@ class RestApiRequestImpl {
             List<Object> listResult = new ArrayList<>();
             JSONArray jsonArray = (JSONArray) jsonObject.get("data");
             jsonArray.forEach(obj -> {
-                if (((JSONObject)obj).containsKey("code")) {
+                if (((JSONObject) obj).containsKey("code")) {
                     ResponseResult responseResult = new ResponseResult();
-                    responseResult.setCode(((JSONObject)obj).getInteger("code"));
-                    responseResult.setMsg(((JSONObject)obj).getString("msg"));
+                    responseResult.setCode(((JSONObject) obj).getInteger("code"));
+                    responseResult.setMsg(((JSONObject) obj).getString("msg"));
                     listResult.add(responseResult);
                 } else {
                     Order o = new Order();
@@ -614,8 +606,8 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<Order> postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
-            TimeInForce timeInForce, String quantity, String price, String reduceOnly,
-            String newClientOrderId, String stopPrice, WorkingType workingType) {
+                                    TimeInForce timeInForce, String quantity, String price, String reduceOnly,
+                                    String newClientOrderId, String stopPrice, WorkingType workingType) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
@@ -665,6 +657,70 @@ class RestApiRequestImpl {
             result.setCode(jsonWrapper.getInteger("code"));
             result.setMsg(jsonWrapper.getString("msg"));
             return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<ResponseResult> changeMarginType(String symbolName, String marginType) {
+        RestApiRequest<ResponseResult> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbolName)
+                .putToUrl("marginType", marginType);
+        request.request = createRequestByPostWithSignature("/fapi/v1/marginType", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            ResponseResult result = new ResponseResult();
+            result.setCode(jsonWrapper.getInteger("code"));
+            result.setMsg(jsonWrapper.getString("msg"));
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<JSONObject> addPositionMargin(String symbolName, int type, String amount, PositionSide positionSide) {
+        RestApiRequest<JSONObject> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbolName)
+                .putToUrl("amount", amount)
+                .putToUrl("positionSide", positionSide.name())
+                .putToUrl("type", type);
+        request.request = createRequestByPostWithSignature("/fapi/v1/positionMargin", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            JSONObject result = new JSONObject();
+            result.put("code", jsonWrapper.getInteger("code"));
+            result.put("msg", jsonWrapper.getString("msg"));
+            result.put("amount", jsonWrapper.getDouble("amount"));
+            result.put("type", jsonWrapper.getInteger("type"));
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<WalletDeltaLog>> getPositionMarginHistory(String symbolName, int type, long startTime, long endTime, int limit) {
+        RestApiRequest<List<WalletDeltaLog>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbolName)
+                .putToUrl("type", type)
+                .putToUrl("startTime", startTime)
+                .putToUrl("endTime", endTime)
+                .putToUrl("limit", limit);
+        request.request = createRequestByGet("/fapi/v1/positionMargin/history", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<WalletDeltaLog> logs = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                WalletDeltaLog log = new WalletDeltaLog();
+                log.setSymbol(item.getString("symbol"));
+                log.setAmount(item.getString("amount"));
+                log.setAsset(item.getString("asset"));
+                log.setTime(item.getLong("time"));
+                log.setPositionSide(item.getString("positionSide"));
+                log.setType(item.getInteger("type"));
+                logs.add(log);
+            });
+            return logs;
         });
         return request;
     }

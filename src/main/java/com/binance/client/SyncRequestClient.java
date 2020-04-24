@@ -5,13 +5,7 @@ import com.binance.client.impl.BinanceApiInternalFactory;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
 import com.binance.client.model.enums.*;
-import com.binance.client.model.trade.AccountBalance;
-import com.binance.client.model.trade.AccountInformation;
-import com.binance.client.model.trade.Income;
-import com.binance.client.model.trade.Leverage;
-import com.binance.client.model.trade.MyTrade;
-import com.binance.client.model.trade.Order;
-import com.binance.client.model.trade.PositionRisk;
+import com.binance.client.model.trade.*;
 
 import java.util.List;
 
@@ -188,6 +182,35 @@ public interface SyncRequestClient {
      * @return ResponseResult.
      */
     ResponseResult changePositionSide(boolean dual);
+
+    /**
+     * Change margin type (ISOLATED, CROSSED)
+     * @param symbolName
+     * @param marginType
+     * @return
+     */
+    ResponseResult changeMarginType(String symbolName, String marginType);
+
+    /**
+     * add isolated position margin
+     * @param symbolName
+     * @param type
+     * @param amount
+     * @param positionSide SHORT, LONG, BOTH
+     * @return
+     */
+    JSONObject addIsolatedPositionMargin(String symbolName, int type, String amount, PositionSide positionSide);
+
+    /**
+     *  get position margin history
+     * @param symbolName
+     * @param type
+     * @param startTime
+     * @param endTime
+     * @param limit
+     * @return
+     */
+    List<WalletDeltaLog> getPositionMarginHistory(String symbolName, int type, long startTime, long endTime, int limit);
 
     /**
      * Get if changed to HEDGE mode. (true == hedge mode, false == one-way mode)

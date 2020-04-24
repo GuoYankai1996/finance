@@ -5,13 +5,7 @@ import com.binance.client.SyncRequestClient;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
 import com.binance.client.model.enums.*;
-import com.binance.client.model.trade.AccountBalance;
-import com.binance.client.model.trade.AccountInformation;
-import com.binance.client.model.trade.Income;
-import com.binance.client.model.trade.Leverage;
-import com.binance.client.model.trade.MyTrade;
-import com.binance.client.model.trade.Order;
-import com.binance.client.model.trade.PositionRisk;
+import com.binance.client.model.trade.*;
 
 import java.util.List;
 
@@ -119,6 +113,22 @@ public class SyncRequestImpl implements SyncRequestClient {
     public ResponseResult changePositionSide(boolean dual) {
         return RestApiInvoker.callSync(requestImpl.changePositionSide(dual));
     }
+
+    @Override
+    public ResponseResult changeMarginType(String symbolName, String marginType) {
+        return RestApiInvoker.callSync(requestImpl.changeMarginType(symbolName, marginType));
+    }
+
+    @Override
+    public JSONObject addIsolatedPositionMargin(String symbolName, int type, String amount, PositionSide positionSide) {
+        return RestApiInvoker.callSync(requestImpl.addPositionMargin(symbolName, type, amount, positionSide));
+    }
+
+    @Override
+    public List<WalletDeltaLog> getPositionMarginHistory(String symbolName, int type, long startTime, long endTime, int limit) {
+        return RestApiInvoker.callSync(requestImpl.getPositionMarginHistory(symbolName, type, startTime, endTime, limit));
+    }
+
 
     @Override
     public JSONObject getPositionSide() {
