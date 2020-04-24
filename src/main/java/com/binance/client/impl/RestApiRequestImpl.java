@@ -606,8 +606,8 @@ class RestApiRequestImpl {
     }
 
     RestApiRequest<Order> postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
-                                    TimeInForce timeInForce, String quantity, String price, String reduceOnly,
-                                    String newClientOrderId, String stopPrice, WorkingType workingType) {
+            TimeInForce timeInForce, String quantity, String price, String reduceOnly,
+            String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType) {
         RestApiRequest<Order> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build()
                 .putToUrl("symbol", symbol)
@@ -620,7 +620,9 @@ class RestApiRequestImpl {
                 .putToUrl("reduceOnly", reduceOnly)
                 .putToUrl("newClientOrderId", newClientOrderId)
                 .putToUrl("stopPrice", stopPrice)
-                .putToUrl("workingType", workingType);
+                .putToUrl("workingType", workingType)
+                .putToUrl("newOrderRespType", newOrderRespType);
+
         request.request = createRequestByPostWithSignature("/fapi/v1/order", builder);
 
         request.jsonParser = (jsonWrapper -> {
@@ -1291,6 +1293,36 @@ class RestApiRequestImpl {
                 element.setLongAccount(item.getBigDecimal("longAccount"));
                 element.setLongShortRatio(item.getBigDecimal("longShortRatio"));
                 element.setShortAccount(item.getBigDecimal("shortAccount"));
+                element.setTimestamp(item.getLong("timestamp"));
+
+                result.add(element);
+            });
+            return result;
+        });
+        return request;
+    }
+
+    RestApiRequest<List<TakerLongShortStat>> getTakerLongShortRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        RestApiRequest<List<TakerLongShortStat>> request = new RestApiRequest<>();
+        UrlParamsBuilder builder = UrlParamsBuilder.build()
+                .putToUrl("symbol", symbol)
+                .putToUrl("period", period.getCode())
+                .putToUrl("startTime", startTime)
+                .putToUrl("endTime", endTime)
+                .putToUrl("limit", limit);
+
+
+//        request.request = createRequestByGetWithSignature("/gateway-api//v1/public/future/data/globalLongShortAccountRatio", builder);
+        request.request = createRequestByGetWithSignature("/futures/data/takerlongshortRatio", builder);
+
+        request.jsonParser = (jsonWrapper -> {
+            List<TakerLongShortStat> result = new LinkedList<>();
+            JsonWrapperArray dataArray = jsonWrapper.getJsonArray("data");
+            dataArray.forEach((item) -> {
+                TakerLongShortStat element = new TakerLongShortStat();
+                element.setBuySellRatio(item.getBigDecimal("buySellRatio"));
+                element.setSellVol(item.getBigDecimal("sellVol"));
+                element.setBuyVol(item.getBigDecimal("buyVol"));
                 element.setTimestamp(item.getLong("timestamp"));
 
                 result.add(element);

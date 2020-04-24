@@ -88,10 +88,10 @@ public class SyncRequestImpl implements SyncRequestClient {
     @Override
     public Order postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
             TimeInForce timeInForce, String quantity, String price, String reduceOnly,
-            String newClientOrderId, String stopPrice, WorkingType workingType) {
+            String newClientOrderId, String stopPrice, WorkingType workingType, NewOrderRespType newOrderRespType) {
         return RestApiInvoker.callSync(requestImpl.postOrder(symbol, side, positionSide, orderType,
                 timeInForce, quantity, price, reduceOnly, 
-                newClientOrderId, stopPrice, workingType));
+                newClientOrderId, stopPrice, workingType,newOrderRespType));
     }
     
     @Override
@@ -213,5 +213,10 @@ public class SyncRequestImpl implements SyncRequestClient {
     @Override
     public List<CommonLongShortRatio> getGlobalAccountRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
         return RestApiInvoker.callSync(requestImpl.getGlobalAccountRatio(symbol, period, startTime, endTime, limit));
+    }
+
+    @Override
+    public List<TakerLongShortStat> getTakerLongShortRatio(String symbol, PeriodType period, Long startTime, Long endTime, Integer limit) {
+        return RestApiInvoker.callSync(requestImpl.getTakerLongShortRatio(symbol, period, startTime, endTime, limit));
     }
 }
