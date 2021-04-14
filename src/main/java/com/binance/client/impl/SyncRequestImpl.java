@@ -172,11 +172,13 @@ public class SyncRequestImpl implements SyncRequestClient {
     
     @Override
     public List<MyTrade> getAccountTrades(String symbol, Long startTime, Long endTime, Long fromId, Integer limit) {
+        //todo 成交历史
         return RestApiInvoker.callSync(requestImpl.getAccountTrades(symbol, startTime, endTime, fromId, limit));
     }
     
     @Override
     public List<Income> getIncomeHistory(String symbol, IncomeType incomeType, Long startTime, Long endTime, Integer limit) {
+        //todo 获取账户损益资金流水
         return RestApiInvoker.callSync(requestImpl.getIncomeHistory(symbol, incomeType, startTime, endTime, limit));
     }
     

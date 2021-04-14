@@ -5,6 +5,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.math.BigDecimal;
 
+/**
+ * {
+ *     "symbol": "BTCUSDT",                // 交易对
+ *     "markPrice": "11793.63104562",      // 标记价格
+ *     "lastFundingRate": "0.00038246",    // 最近更新的资金费率
+ *     "nextFundingTime": 1597392000000,   // 下次资金费时间
+ *     "time": 1597370495002               // 更新时间
+ * }
+ **/
 public class MarkPrice {
 
     private String symbol;

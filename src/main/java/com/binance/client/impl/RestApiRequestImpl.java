@@ -1,5 +1,6 @@
 package com.binance.client.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -422,7 +423,8 @@ class RestApiRequestImpl {
             dataArray.forEach(item -> {
                 FundingRate element = new FundingRate();
                 element.setSymbol(item.getString("symbol"));
-                element.setFundingRate(item.getBigDecimal("fundingRate"));
+                //转化为百分制
+                element.setFundingRate(item.getBigDecimal("fundingRate").multiply(new BigDecimal(100)));
                 element.setFundingTime(item.getLong("fundingTime"));
                 result.add(element);
             });

@@ -59,6 +59,8 @@ public interface SyncRequestClient {
      * Fetch current exchange trading rules and symbol information.
      *
      * @return Current exchange trading rules and symbol information.
+     *
+     *
      */
     ExchangeInformation getExchangeInformation();
 
@@ -98,17 +100,25 @@ public interface SyncRequestClient {
     List<Candlestick> getCandlestick(String symbol, CandlestickInterval interval, Long startTime, Long endTime, Integer limit);
 
     /**
-     * Get mark price for a symbol.
+     * 获取当前交易对价格&&最新的资金费费率
      *
+     * @param symbol: 交易对
      * @return Mark price for a symbol.
      */
     List<MarkPrice> getMarkPrice(String symbol);
 
     /**
-     * Get funding rate history.
+     * @Description: 获取历史资金费信息
+     * 如果 startTime 和 endTime 都未发送, 返回最近 limit 条数据.
+     * 如果 startTime 和 endTime 之间的数据量大于 limit, 返回 startTime + limit情况下的数据。
      *
-     * @return funding rate history.
-     */
+     * @Author: wangtianren
+     * @param symbol: 交易对
+     * @param startTime:起始时间
+     * @param endTime: 结束时间
+     * @param limit: 默认值:100 最大值:1000
+     * @Return:
+     **/
     List<FundingRate> getFundingRate(String symbol, Long startTime, Long endTime, Integer limit);
 
     /**
@@ -270,7 +280,7 @@ public interface SyncRequestClient {
 
     /**
      * Get trades for a specific account and symbol.
-     *
+     * 成交历史
      * @return Trades.
      */
     List<MyTrade> getAccountTrades(String symbol, Long startTime, Long endTime, Long fromId, Integer limit);
