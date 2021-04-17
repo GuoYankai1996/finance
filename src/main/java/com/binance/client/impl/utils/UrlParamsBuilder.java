@@ -2,17 +2,14 @@ package com.binance.client.impl.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.binance.client.exception.BinanceApiException;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import java.util.*;
 
 public class UrlParamsBuilder {
 

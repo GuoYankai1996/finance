@@ -2,6 +2,7 @@ package com.binance.client;
 
 import com.binance.client.constant.BinanceApiConstants;
 import com.binance.client.exception.BinanceApiException;
+
 import java.net.URL;
 
 /**

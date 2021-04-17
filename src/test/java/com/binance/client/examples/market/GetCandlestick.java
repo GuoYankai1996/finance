@@ -1,11 +1,9 @@
 package com.binance.client.examples.market;
 
-import com.binance.client.model.enums.CandlestickInterval;
-
 import com.binance.client.RequestOptions;
 import com.binance.client.SyncRequestClient;
-
 import com.binance.client.examples.constants.PrivateConfig;
+import com.binance.client.model.enums.CandlestickInterval;
 
 public class GetCandlestick {
     public static void main(String[] args) {

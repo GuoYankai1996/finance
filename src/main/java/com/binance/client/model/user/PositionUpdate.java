@@ -2,6 +2,7 @@ package com.binance.client.model.user;
 
 import com.binance.client.constant.BinanceApiConstants;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.math.BigDecimal;
 
 public class PositionUpdate {

@@ -4,6 +4,7 @@ import com.binance.client.RequestOptions;
 import com.binance.client.SubscriptionClient;
 import com.binance.client.SubscriptionOptions;
 import com.binance.client.SyncRequestClient;
+
 import java.net.URI;
 
 public final class BinanceApiInternalFactory {

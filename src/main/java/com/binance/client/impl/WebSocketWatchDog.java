@@ -2,13 +2,14 @@ package com.binance.client.impl;
 
 import com.binance.client.SubscriptionOptions;
 import com.binance.client.impl.WebSocketConnection.ConnectionState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class WebSocketWatchDog {
 

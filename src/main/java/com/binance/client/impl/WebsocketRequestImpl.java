@@ -1,29 +1,17 @@
 package com.binance.client.impl;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import com.binance.client.impl.utils.JsonWrapper;
-import com.binance.client.impl.utils.JsonWrapperArray;
-
 import com.binance.client.SubscriptionErrorHandler;
 import com.binance.client.SubscriptionListener;
 import com.binance.client.impl.utils.Channels;
+import com.binance.client.impl.utils.JsonWrapper;
+import com.binance.client.impl.utils.JsonWrapperArray;
 import com.binance.client.model.enums.CandlestickInterval;
-import com.binance.client.model.event.AggregateTradeEvent;
-import com.binance.client.model.event.CandlestickEvent;
-import com.binance.client.model.event.LiquidationOrderEvent;
-import com.binance.client.model.event.MarkPriceEvent;
-import com.binance.client.model.event.OrderBookEvent;
-import com.binance.client.model.event.SymbolBookTickerEvent;
-import com.binance.client.model.event.SymbolMiniTickerEvent;
-import com.binance.client.model.event.SymbolTickerEvent;
+import com.binance.client.model.event.*;
 import com.binance.client.model.market.OrderBookEntry;
-import com.binance.client.model.user.AccountUpdate;
-import com.binance.client.model.user.BalanceUpdate;
-import com.binance.client.model.user.OrderUpdate;
-import com.binance.client.model.user.PositionUpdate;
-import com.binance.client.model.user.UserDataUpdateEvent;
+import com.binance.client.model.user.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 class WebsocketRequestImpl {
 

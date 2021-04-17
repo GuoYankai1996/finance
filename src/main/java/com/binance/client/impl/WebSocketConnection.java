@@ -1,16 +1,15 @@
 package com.binance.client.impl;
 
+import com.binance.client.SubscriptionOptions;
+import com.binance.client.constant.BinanceApiConstants;
+import com.binance.client.exception.BinanceApiException;
+import com.binance.client.impl.utils.JsonWrapper;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.binance.client.SubscriptionOptions;
-import com.binance.client.constant.BinanceApiConstants;
-import com.binance.client.exception.BinanceApiException;
-import com.binance.client.impl.utils.JsonWrapper;
 
 public class WebSocketConnection extends WebSocketListener {
 

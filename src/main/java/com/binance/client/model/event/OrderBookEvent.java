@@ -1,11 +1,10 @@
 package com.binance.client.model.event;
 
 import com.binance.client.constant.BinanceApiConstants;
+import com.binance.client.model.market.OrderBookEntry;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.List;
-
-import com.binance.client.model.market.OrderBookEntry;
 
 public class OrderBookEvent {
 

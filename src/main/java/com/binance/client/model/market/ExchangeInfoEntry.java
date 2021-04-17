@@ -3,10 +3,9 @@ package com.binance.client.model.market;
 import com.binance.client.constant.BinanceApiConstants;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-
-import java.math.BigDecimal;
 
 public class ExchangeInfoEntry {
 

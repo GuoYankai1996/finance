@@ -3,8 +3,8 @@ package com.binance.client.model.trade;
 import com.binance.client.constant.BinanceApiConstants;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.List;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class AccountInformation {
 

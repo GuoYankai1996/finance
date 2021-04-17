@@ -1,11 +1,8 @@
 package com.binance.client.impl.utils;
 
 import com.binance.client.exception.BinanceApiException;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import java.io.*;
 import java.util.zip.GZIPInputStream;
 
 public abstract class InternalUtils {

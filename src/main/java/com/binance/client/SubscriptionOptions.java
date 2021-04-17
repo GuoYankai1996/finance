@@ -1,6 +1,7 @@
 package com.binance.client;
 
 import com.binance.client.exception.BinanceApiException;
+
 import java.net.URI;
 
 /**
