@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.google.common.collect.Lists;
 import com.huobi.sdk.client.AccountClient;
 import com.huobi.sdk.client.req.account.*;
-import com.huobi.sdk.constant.HuobiOptions;
 import com.huobi.sdk.constant.Options;
 import com.huobi.sdk.constant.WebSocketConstants;
 import com.huobi.sdk.constant.enums.AccountTypeEnum;
@@ -18,14 +16,8 @@ import com.huobi.sdk.signature.UrlParamsBuilder;
 import com.huobi.sdk.model.account.*;
 import com.huobi.sdk.utils.InputChecker;
 import com.huobi.sdk.utils.ResponseCallback;
-import com.zjiecode.wxpusher.client.WxPusher;
-import com.zjiecode.wxpusher.client.bean.Message;
-import com.zjiecode.wxpusher.client.bean.MessageResult;
-import com.zjiecode.wxpusher.client.bean.Result;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +35,9 @@ public class HuobiAccountService implements AccountClient {
     public static final String POINT_TRANSFER_PATH = "/v2/point/transfer";
     public static final String ACCOUNT_ASSET_VALUATION_PATH = "/v2/account/asset-valuation";
     //获取逐仓usdt本位合约信息
-    public static final String GET_ACCOUNT = "/linear-swap-api/v1/swap_account_info";
+    public static final String GET_USDT_ACCOUNT = "/linear-swap-api/v1/swap_account_info";
+    //获取USD本位合约信息
+    public static final String GET_USD_ACCOUNT = "/swap-api/v1/swap_account_info";
 
     public static final String SUB_ACCOUNT_UPDATE_TOPIC = "accounts.update#${mode}";
 
@@ -60,51 +54,6 @@ public class HuobiAccountService implements AccountClient {
         this.restConnection = new HuobiRestConnection(options);
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        scanUsdtAccount();
-    }
-
-    private static void scanUsdtAccount() throws InterruptedException {
-        HuobiAccountService walletService = new HuobiAccountService(HuobiOptions.builder()
-                //郭颜恺的密钥对。向不同用户发送，以下两行需要替换
-                .apiKey("7e987a55-46138975-gr4edfki8l-36827")
-                .secretKey("9217c11f-b232cba6-73ef94ac-3658e")
-                .build());
-        while (true) {
-
-            List<AccountDsdt> usdtAccountDetail = walletService.getUsdtAccountDetail();
-            ssss(usdtAccountDetail);
-            Thread.sleep(60000);
-        }
-    }
-
-    private static void ssss(List<AccountDsdt> usdtAccountDetail) {
-        ArrayList<String> notice = Lists.newArrayList();
-        usdtAccountDetail.forEach(a -> {
-
-            if (a.getRisk_rate() != null&&a.getRisk_rate().compareTo(new BigDecimal("0.5"))<0) {
-                String r = String.format("合约类型：%s，保证金率：%s%%，账户权益：%s（USDT），预估强平价：%s（USDT）",
-                        a.getContract_code(),
-                        a.getRisk_rate().multiply(new BigDecimal("100")).setScale(2,RoundingMode.HALF_EVEN).toPlainString(),
-                        a.getMargin_balance().setScale(2,RoundingMode.HALF_EVEN).toPlainString(),
-                        a.getLiquidation_price().setScale(10,RoundingMode.HALF_EVEN).toPlainString());
-                notice.add(r);
-
-            }
-        });
-        if(!notice.isEmpty()){
-
-            Message message = new Message();
-            //这里是申请的应用名。不用改。
-            message.setAppToken("AT_o2gKOCnaxzZx0NUWrjVQEyZmjxuNLT12");
-            message.setContentType(Message.CONTENT_TYPE_TEXT);
-            message.setContent(JSON.toJSONString(notice));
-            //这里是向不同的用户发送消息，这是郭颜恺的uid
-            message.setUid("UID_BkZzfxxYtyNMhpzmiJDllCObK5TU");
-            Result<List<MessageResult>> result = WxPusher.send(message);
-        }
-
-    }
 
     @Override
     public List<Account> getAccounts() {
@@ -126,16 +75,32 @@ public class HuobiAccountService implements AccountClient {
         JSONObject data = jsonObject.getJSONObject("data");
         return new AccountBalanceParser().parse(data);
     }
-
-    public List<AccountDsdt> getUsdtAccountDetail() {
+    //usdt本位永续合约接口
+    public List<AccountDetail> getUsdtAccountDetail() {
 
         UrlParamsBuilder builder = UrlParamsBuilder.build();
-        JSONObject jsonObject = restConnection.executePostWithSignature(GET_ACCOUNT, builder);
+        JSONObject jsonObject = restConnection.executePostWithSignature(GET_USDT_ACCOUNT, builder);
+        String status = jsonObject.getString("status");
+        if(!StringUtils.equals("ok",status)){
+            throw new RuntimeException("火币接口获取usdt账户信息接口响应出错，status="+status);
+        }
         String data = jsonObject.get("data").toString();
-        return JSON.parseObject(data, new TypeReference<List<AccountDsdt>>() {
+        return JSON.parseObject(data, new TypeReference<List<AccountDetail>>() {
         });
     }
+    //币本位永续合约接口
+    public List<AccountDetail> getUsdAccountDetail() {
 
+        UrlParamsBuilder builder = UrlParamsBuilder.build();
+        JSONObject jsonObject = restConnection.executePostWithSignature(GET_USD_ACCOUNT, builder);
+        String status = jsonObject.getString("status");
+        if(!StringUtils.equals("ok",status)){
+            throw new RuntimeException("火币接口获取usd账户信息接口响应出错，status="+status);
+        }
+        String data = jsonObject.get("data").toString();
+        return JSON.parseObject(data, new TypeReference<List<AccountDetail>>() {
+        });
+    }
     public List<AccountHistory> getAccountHistory(AccountHistoryRequest request) {
 
         InputChecker.checker()

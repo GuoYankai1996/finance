@@ -11,9 +11,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class HuobiOptions implements Options {
-
+  //"https://api.btcgateway.pro"; 国内访问用这个测试
   @Builder.Default
-  private String restHost = "https://api.btcgateway.pro";
+  private String restHost ="https://api.huobi.pro";
+
 
   @Builder.Default
   private String websocketHost = "wss://api.huobi.pro";

@@ -8,7 +8,9 @@ import java.math.BigDecimal;
  * Created by guoyankai on 2021/4/17
  */
 @Data
-public class AccountDsdt {
+public class AccountDetail {
+    //品种代码
+    private String symbol;
     //交易对
     private String contract_code;
     //保证金率
