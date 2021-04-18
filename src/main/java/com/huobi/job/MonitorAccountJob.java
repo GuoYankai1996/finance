@@ -2,6 +2,7 @@ package com.huobi.job;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.huobi.notice.MessageUtil;
 import com.huobi.sdk.client.impl.HuobiAccountService;
 import com.huobi.sdk.constant.HuobiOptions;
 import com.huobi.sdk.model.UserEntity;
@@ -40,7 +41,7 @@ public class MonitorAccountJob {
     @PostConstruct
     public void init(){
         users.forEach(u->{
-            sendMessage(u,Lists.newArrayList("监听job上线"));
+            MessageUtil.sendMessage(u,Lists.newArrayList("监听job上线"));
         });
     }
     @Scheduled(fixedRate = 60 * 1000L)
@@ -61,32 +62,18 @@ public class MonitorAccountJob {
                 List<AccountDetail> usdAccountDetail = walletService.getUsdAccountDetail();
                 messages.addAll(validUsdAccountDetail(usdAccountDetail));
                 if (!messages.isEmpty()) {
-                    sendMessage(u, messages);
+                    MessageUtil.sendMessage(u, messages);
                 }
             } catch (Exception e) {
                 log.error("监控账户job出现异常", e);
-                sendMessage(u, Lists.newArrayList("监控账户job出现异常:" + e.getMessage()));
+                MessageUtil.sendMessage(u, Lists.newArrayList("监控账户job出现异常:" + e.getMessage()));
             }
         });
         log.info("监控账户job结束");
 
     }
 
-    private void sendMessage(UserEntity u, List<String> messages) {
-        try {
-            Message message = new Message();
-            //这里是申请的应用名。不用改。
-            message.setAppToken("AT_o2gKOCnaxzZx0NUWrjVQEyZmjxuNLT12");
-            message.setContentType(Message.CONTENT_TYPE_TEXT);
-            message.setContent(JSON.toJSONString(messages));
-            //这里是向不同的用户发送消息
-            message.setUid(u.getUid());
-            Result<List<MessageResult>> result = WxPusher.send(message);
-            result.getCode();
-        } catch (Exception e) {
-            log.error("消息发送失败：{}", JSON.toJSONString(messages));
-        }
-    }
+
 
     private List<String> validUsdtAccountDetail(List<AccountDetail> usdtAccountDetail) {
         ArrayList<String> notice = Lists.newArrayList();
