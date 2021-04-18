@@ -13,7 +13,7 @@ import lombok.ToString;
 public class HuobiOptions implements Options {
   //"https://api.btcgateway.pro"; 国内访问用这个测试
   @Builder.Default
-  private String restHost ="https://api.huobi.pro";
+  private String restHost ="https://api.hbdm.com";
 
 
   @Builder.Default
