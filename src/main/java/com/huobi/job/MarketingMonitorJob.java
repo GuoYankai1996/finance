@@ -69,7 +69,9 @@ public class MarketingMonitorJob {
             List<String> messages = compares.stream().filter(c -> c.getRate().compareTo(new BigDecimal("8")) > 0).map(c -> {
                 return String.format("%s的币本位合约与USDT本位合约出现%s%%差异，可以行动！。usd=%s，usdt=%s", c.getSymbol(), c.getRate().toPlainString(),c.getUsdPrice().toPlainString(),c.getUsdTPrice().toPlainString());
             }).collect(Collectors.toList());
-           MessageUtil.sendMessage(u,messages);
+            if (!messages.isEmpty()) {
+                MessageUtil.sendMessage(u,messages);
+            }
         });
     };
 
