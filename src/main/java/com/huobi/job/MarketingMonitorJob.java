@@ -47,24 +47,7 @@ public class MarketingMonitorJob {
                     .apiKey(u.getAccessToken())
                     .secretKey(u.getAccessSecret())
                     .build());
-            List<MarketPrice> usdtMarkeing = s.getUSDTMarkeing();
-            List<MarketPrice> usdMarkeing = s.getUSDMarkeing();
-            List<PriceCompare> compare = usdtMarkeing.stream().map(usdt -> {
-                Optional<MarketPrice> usdPrice = usdMarkeing.stream().filter(usd -> usd.getSymbol().equals(usdt.getSymbol())).findAny();
-                if (usdPrice.isPresent()) {
-                    return new PriceCompare(usdt.getSymbol(), usdt.getPrice(), usdPrice.get().getPrice(), null);
-                }
-                return null;
-            }).filter(e -> e != null).collect(Collectors.toList());
-            List<PriceCompare> compares = compare.stream().map(c -> {
-                BigDecimal usdPrice = c.getUsdPrice();
-                BigDecimal usdTPrice = c.getUsdTPrice();
-                BigDecimal rateAmount = usdPrice.subtract(usdTPrice).abs();
-                //加权差异比率。    （ a比率+b比率）/2
-                BigDecimal rate = rateAmount.divide(usdTPrice, 8, RoundingMode.HALF_EVEN).add(rateAmount.divide(usdPrice, 8, RoundingMode.HALF_EVEN)).divide(new BigDecimal(2), 8, RoundingMode.HALF_EVEN);
-                c.setRate(rate.multiply(new BigDecimal("100")));
-                return c;
-            }).sorted((a, b) -> b.getRate().compareTo(a.getRate())).collect(Collectors.toList());
+            List<PriceCompare> compares = getPriceCompares(s);
             //大于8个点就发通知！！！
             List<String> messages = compares.stream().filter(c -> c.getRate().compareTo(new BigDecimal("8")) > 0).map(c -> {
                 return String.format("%s的币本位合约与USDT本位合约出现%s%%差异，可以行动！。usd=%s，usdt=%s", c.getSymbol(), c.getRate().toPlainString(),c.getUsdPrice().toPlainString(),c.getUsdTPrice().toPlainString());
@@ -73,7 +56,56 @@ public class MarketingMonitorJob {
                 MessageUtil.sendMessage(u,messages);
             }
         });
-    };
+    }
+
+    public static void main(String[] args) {
+        //币合约价格
+        BigDecimal bi = new BigDecimal("33.35");
+        //U合约价格
+        BigDecimal u = new BigDecimal("33.34");
+        //币本位做多，u本位做空,每边放1wUsdt,总共2wUsdt
+        //持有多少个币
+        BigDecimal biCount=new BigDecimal("10000").divide(u,5, RoundingMode.HALF_EVEN);
+        //持有多少个USDT
+        BigDecimal uCount=new BigDecimal("10000");
+        //u本位做空的倍数,币本位只做1倍
+        int i=2;
+        for(int j=0;j<=70;j++){
+            //最终统一价
+            BigDecimal value = new BigDecimal(j);
+            //最终币本位持有多少u
+            BigDecimal biAmount = value.divide(bi, 5, RoundingMode.HALF_EVEN).multiply(biCount).multiply(value);
+            //最终usdt合约持有多少u
+            BigDecimal uAmount=u.subtract(value).divide(u,5,RoundingMode.HALF_EVEN).multiply(new BigDecimal(i)).add(new BigDecimal("1")).multiply(uCount);
+            //利润
+            BigDecimal get=biAmount.add(uAmount).subtract( new BigDecimal("20000"));
+            String s=String.format("开仓差异比率%s%%,最终价格%s，币本位持仓 %s USDT,u本位持仓 %s USDT,利润 %s USDT，总仓位收益比率%s%%",bi.multiply(new BigDecimal(100)).divide(u,5,RoundingMode.HALF_EVEN).setScale(5,RoundingMode.HALF_EVEN),value,biAmount,uAmount,get,get.divide(new BigDecimal("20000"),6,RoundingMode.HALF_EVEN).multiply(new BigDecimal(100)));
+            System.out.println(s);
+        }
+    }
+    public static List<PriceCompare> getPriceCompares(HuobiMarketingService s) {
+        List<MarketPrice> usdtMarkeing = s.getUSDTMarkeing();
+        List<MarketPrice> usdMarkeing = s.getUSDMarkeing();
+        List<PriceCompare> compare = usdtMarkeing.stream().map(usdt -> {
+            Optional<MarketPrice> usdPrice = usdMarkeing.stream().filter(usd -> usd.getSymbol().equals(usdt.getSymbol())).findAny();
+            if (usdPrice.isPresent()) {
+                return new PriceCompare(usdt.getSymbol(), usdt.getPrice(), usdPrice.get().getPrice(), null);
+            }
+            return null;
+        }).filter(e -> e != null).collect(Collectors.toList());
+        List<PriceCompare> compares = compare.stream().map(c -> {
+            BigDecimal usdPrice = c.getUsdPrice();
+            BigDecimal usdTPrice = c.getUsdTPrice();
+            BigDecimal rateAmount = usdTPrice.subtract(usdPrice);
+            //加权差异比率。    （ a比率+b比率）/2
+            BigDecimal rate = rateAmount.divide(usdTPrice, 8, RoundingMode.HALF_EVEN).add(rateAmount.divide(usdPrice, 8, RoundingMode.HALF_EVEN)).divide(new BigDecimal(2), 8, RoundingMode.HALF_EVEN);
+            c.setRate(rate.multiply(new BigDecimal("100")));
+            return c;
+        }).sorted((a, b) -> b.getRate().compareTo(a.getRate())).collect(Collectors.toList());
+        return compares;
+    }
+
+    ;
 
 
 }

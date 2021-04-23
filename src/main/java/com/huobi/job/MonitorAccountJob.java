@@ -7,6 +7,7 @@ import com.huobi.sdk.client.impl.HuobiAccountService;
 import com.huobi.sdk.constant.HuobiOptions;
 import com.huobi.sdk.model.UserEntity;
 import com.huobi.sdk.model.account.AccountDetail;
+import com.huobi.sdk.model.account.MariginTradeAccount;
 import com.zjiecode.wxpusher.client.WxPusher;
 import com.zjiecode.wxpusher.client.bean.Message;
 import com.zjiecode.wxpusher.client.bean.MessageResult;
@@ -36,7 +37,15 @@ public class MonitorAccountJob {
     );
 
 //    public static void main(String[] args) throws Exception {
-//        new MonitorAccountJob().scheduleAtFixedRate();
+//        HuobiAccountService walletService = new HuobiAccountService(HuobiOptions.builder()
+//                //密钥对。向不同用户发送
+//                .apiKey("7e987a55-46138975-gr4edfki8l-36827")
+//                .secretKey("9217c11f-b232cba6-73ef94ac-3658e")
+//                .restHost("https://api.huobi.pro")
+//                .build());
+//        List<MariginTradeAccount> marginTrading = walletService.getMarginTrading();
+//        List<String> strings = validMarginTrade(marginTrading);
+//        System.out.println(JSON.toJSONString(strings));
 //    }
     @PostConstruct
     public void init(){
@@ -50,6 +59,7 @@ public class MonitorAccountJob {
         users.forEach(u -> {
             try {
                 List<String> messages=new LinkedList<>();
+                //合约账户
                 HuobiAccountService walletService = new HuobiAccountService(HuobiOptions.builder()
                         //密钥对。向不同用户发送
                         .apiKey(u.getAccessToken())
@@ -61,6 +71,17 @@ public class MonitorAccountJob {
                 //币本位监控
                 List<AccountDetail> usdAccountDetail = walletService.getUsdAccountDetail();
                 messages.addAll(validUsdAccountDetail(usdAccountDetail));
+                //现货账户
+                HuobiAccountService marginWalletService = new HuobiAccountService(HuobiOptions.builder()
+                        //密钥对。向不同用户发送
+                        .apiKey(u.getAccessToken())
+                        .secretKey(u.getAccessSecret())
+                        .restHost("https://api.huobi.pro")
+                        .build());
+                //现货逐仓杠杆监控
+                List<MariginTradeAccount> marginTrading = marginWalletService.getMarginTrading();
+                messages.addAll(validMarginTrade(marginTrading));
+
                 if (!messages.isEmpty()) {
                     MessageUtil.sendMessage(u, messages);
                 }
@@ -108,5 +129,17 @@ public class MonitorAccountJob {
         });
         return notice;
     }
-
+    private List<String> validMarginTrade(List<MariginTradeAccount> accountDetail) {
+        ArrayList<String> notice = Lists.newArrayList();
+        accountDetail.forEach(a -> {
+            BigDecimal riskRate = new BigDecimal(a.getRiskRate()).multiply(new BigDecimal("100"));
+            if (riskRate.compareTo(new BigDecimal("130"))<0
+            ) {
+                String r = String.format("现货逐仓杠杆预警：%s，风险率：%s%%",
+                        a.getSymbol(),riskRate.setScale(3,RoundingMode.HALF_EVEN).toPlainString());
+                notice.add(r);
+            }
+        });
+        return notice;
+    }
 }

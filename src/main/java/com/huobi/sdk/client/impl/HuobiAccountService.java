@@ -38,6 +38,8 @@ public class HuobiAccountService implements AccountClient {
     public static final String GET_USDT_ACCOUNT = "/linear-swap-api/v1/swap_account_info";
     //获取USD本位合约信息
     public static final String GET_USD_ACCOUNT = "/swap-api/v1/swap_account_info";
+    //获取现货逐仓杠杆
+    public static final String GET_MARGIN_TRADE = "/v1/margin/accounts/balance";
 
     public static final String SUB_ACCOUNT_UPDATE_TOPIC = "accounts.update#${mode}";
 
@@ -100,6 +102,19 @@ public class HuobiAccountService implements AccountClient {
         String data = jsonObject.get("data").toString();
         return JSON.parseObject(data, new TypeReference<List<AccountDetail>>() {
         });
+    }
+    //现货逐仓杠杆
+    public List<MariginTradeAccount> getMarginTrading(){
+        UrlParamsBuilder builder = UrlParamsBuilder.build();
+        JSONObject jsonObject = restConnection.executeGetWithSignature(GET_MARGIN_TRADE, builder);
+        String status = jsonObject.getString("status");
+        if(!StringUtils.equals("ok",status)){
+            throw new RuntimeException("火币接口获取逐仓杠杆账户信息接口响应出错，status="+status);
+        }
+        String data = jsonObject.get("data").toString();
+        List<MariginTradeAccount> mariginTradeAccounts = JSON.parseObject(data, new TypeReference<List<MariginTradeAccount>>() {
+        });
+        return mariginTradeAccounts;
     }
     public List<AccountHistory> getAccountHistory(AccountHistoryRequest request) {
 
