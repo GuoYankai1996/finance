@@ -15,8 +15,8 @@ import java.math.BigDecimal;
 public class PriceCompare {
     //品种代码
     private String symbol;
-    private BigDecimal usdTPrice;
-    private BigDecimal usdPrice;
+    private BigDecimal price1;
+    private BigDecimal price2;
     //价差比例(百分位) 大小 0-100
     private BigDecimal rate;
 }

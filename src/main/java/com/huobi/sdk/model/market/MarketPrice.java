@@ -13,6 +13,6 @@ public class MarketPrice {
     private String symbol;
     //交易对
     private String contract_code;
-    //指数价格
+    //成交价格
     private BigDecimal price;
 }
